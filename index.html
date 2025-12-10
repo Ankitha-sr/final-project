@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Stress Factors Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="container">
+       
+
+        <!-- Decorative visual element -->
+        <div class="header-visual">
+            <div class="header-circle"></div>
+            <div class="header-orbit"></div>
+            <div class="header-dot header-dot-1"></div>
+            <div class="header-dot header-dot-2"></div>
+        </div>
+    </div>
+
+
+
+        <!-- Filter Panel -->
+        <div class="filter-panel">
+            <h3>Filters & Controls</h3>
+            <div class="filter-group">
+                <label for="stressFilter">Stress Level:</label>
+                <select id="stressFilter" multiple>
+                    <option value="0" selected>Low (0)</option>
+                    <option value="1" selected>Medium (1)</option>
+                    <option value="2" selected>High (2)</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="bullyingFilter">Bullying:</label>
+                <select id="bullyingFilter">
+                    <option value="all" selected>All</option>
+                    <option value="0">None</option>
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Moderate</option>
+                    <option value="4">High</option>
+                    <option value="5">Very High</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="sleepFilter">Sleep Quality:</label>
+                <select id="sleepFilter">
+                    <option value="all" selected>All</option>
+                    <option value="1">Poor</option>
+                    <option value="2">Fair</option>
+                    <option value="3">Average</option>
+                    <option value="4">Good</option>
+                    <option value="5">Excellent</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="studyLoadFilter">Study Load:</label>
+                <select id="studyLoadFilter">
+                    <option value="all" selected>All</option>
+                    <option value="1">Very Light</option>
+                    <option value="2">Light</option>
+                    <option value="3">Moderate</option>
+                    <option value="4">Heavy</option>
+                    <option value="5">Very Heavy</option>
+                </select>
+            </div>
+            
+            <button id="resetFilters" class="reset-btn">Reset All Filters</button>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="overview-section">
+            <h2>Dataset Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Students</h4>
+                    <p id="totalStudents">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Low Stress</h4>
+                    <p id="lowStress">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Medium Stress</h4>
+                    <p id="mediumStress">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4>High Stress</h4>
+                    <p id="highStress">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visualization 1: Grouped Bar Charts -->
+        <div class="viz-section">
+            <div class="viz-header">
+                <h2>Viz 1: Psychological Factors Across Stress Levels</h2>
+                <p class="viz-description">Compare anxiety, depression, and self-esteem across different stress groups</p>
+            </div>
+            <div class="viz-controls">
+                <label for="psychFactorSelect">Select Factor:</label>
+                <select id="psychFactorSelect">
+                    <option value="anxiety_level">Anxiety Level</option>
+                    <option value="depression">Depression</option>
+                    <option value="self_esteem">Self Esteem</option>
+                </select>
+            </div>
+            <div id="viz1" class="visualization"></div>
+            <div id="viz1-tooltip" class="tooltip"></div>
+        </div>
+
+        <!-- Visualization 2: Stacked Percentage Bar Chart -->
+        <div class="viz-section">
+            <div class="viz-header">
+                <h2>Viz 2: Lifestyle Factors and Stress Distribution</h2>
+                <p class="viz-description">Show how stress levels shift across lifestyle categories</p>
+            </div>
+            <div class="viz-controls">
+                <label for="lifestyleFactorSelect">Select Lifestyle Factor:</label>
+                <select id="lifestyleFactorSelect">
+                    <option value="sleep_quality">Sleep Quality</option>
+                    <option value="study_load">Study Load</option>
+                    <option value="extracurricular_activities">Extracurricular Activities</option>
+                    <option value="social_support">Social Support</option>
+                </select>
+            </div>
+            <div id="viz2" class="visualization"></div>
+            <div id="viz2-tooltip" class="tooltip"></div>
+        </div>
+
+        <!-- Visualization 3: Scatter Plot Matrix -->
+        <div class="viz-section">
+            <div class="viz-header">
+                <h2>Viz 3: Scatter Plot Matrix - Outlier Detection</h2>
+                <p class="viz-description">Explore relationships between multiple variables and locate unusual patterns</p>
+            </div>
+            <div class="viz-controls">
+                <label>Variables in Matrix:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" class="scattervar" value="anxiety_level" checked> Anxiety</label>
+                    <label><input type="checkbox" class="scattervar" value="depression" checked> Depression</label>
+                    <label><input type="checkbox" class="scattervar" value="self_esteem" checked> Self Esteem</label>
+                    <label><input type="checkbox" class="scattervar" value="sleep_quality" checked> Sleep Quality</label>
+                    <label><input type="checkbox" class="scattervar" value="study_load"> Study Load</label>
+                    <label><input type="checkbox" class="scattervar" value="social_support"> Social Support</label>
+                </div>
+            </div>
+            <div id="viz3" class="visualization"></div>
+            <div id="viz3-tooltip" class="tooltip"></div>
+        </div>
+
+        <!-- Visualization 4: Annotated Pair Plot -->
+        <div class="viz-section">
+            <div class="viz-header">
+                <h2>Viz 4: Extreme Stress Cases - Annotated Analysis</h2>
+                <p class="viz-description">Highlight and annotate extreme stress cases</p>
+            </div>
+            <div class="viz-controls">
+                <label for="xAxisSelect">X-Axis:</label>
+                <select id="xAxisSelect">
+                    <option value="bullying">Bullying</option>
+                    <option value="self_esteem">Self Esteem</option>
+                    <option value="anxiety_level">Anxiety Level</option>
+                    <option value="depression">Depression</option>
+                    <option value="social_support">Social Support</option>
+                </select>
+                
+                <label for="yAxisSelect">Y-Axis:</label>
+                <select id="yAxisSelect">
+                    <option value="stress_level">Stress Level</option>
+                    <option value="anxiety_level">Anxiety Level</option>
+                    <option value="depression">Depression</option>
+                    <option value="sleep_quality">Sleep Quality</option>
+                </select>
+                
+                <label>
+                    <input type="checkbox" id="showExtremesOnly"> Show Only Extreme Cases
+                </label>
+            </div>
+            <div id="viz4" class="visualization"></div>
+            <div id="viz4-tooltip" class="tooltip"></div><div id="extremes-legend" class="extremes-legend"></div>
+        </div>
+
+        
+    <!-- Load the D3.js visualization script -->
+    <script src="visualization.js"></script>
+</body>
+</html>
